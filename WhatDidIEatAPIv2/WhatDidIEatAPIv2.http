@@ -1,0 +1,6 @@
+@WhatDidIEatAPIv2_HostAddress = http://localhost:5036
+
+GET {{WhatDidIEatAPIv2_HostAddress}}/api/meal/getmeals
+Accept: application/json
+
+###
