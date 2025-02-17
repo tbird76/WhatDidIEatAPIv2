@@ -2,7 +2,7 @@
 
 public class MealDTO
 {
-  public int Id { get; set; }
+  public string Id { get; set; } = string.Empty;
 
   public DateTime DateCreated { get; set; }
 

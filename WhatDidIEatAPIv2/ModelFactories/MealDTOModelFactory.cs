@@ -10,7 +10,7 @@ public partial class ModelFactory(IPictureService pictureService) : IModelFactor
   {
     return new()
     {
-      Id = meal.Id,
+      Id = meal.Id.ToString(),
       DateCreated = meal.DateCreated,
       DateLastUpdated = meal.DateLastUpdated,
       Name = meal.Name,
@@ -22,17 +22,12 @@ public partial class ModelFactory(IPictureService pictureService) : IModelFactor
     };
   }
 
-
-  public MealDTO? CreateMealDTO(Meal meal, MealPicture picture)
+  public Meal ParseMealFromMealDTO(MealDTO meal)
   {
-    if(meal == null)
-    {
-      return null;
-    }
-
+    var isInt = Int32.TryParse(meal.Id, out var result);
     return new()
     {
-      Id = meal.Id,
+      Id =  isInt ? result : default,
       DateCreated = meal.DateCreated,
       DateLastUpdated = meal.DateLastUpdated,
       Name = meal.Name,
@@ -40,7 +35,6 @@ public partial class ModelFactory(IPictureService pictureService) : IModelFactor
       Comment = meal.Comment,
       PictureName = meal.PictureName,
       RestaurantId = meal.RestaurantId,
-      Picture = picture
     };
   }
 }
