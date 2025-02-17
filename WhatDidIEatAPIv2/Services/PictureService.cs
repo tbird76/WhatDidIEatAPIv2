@@ -1,6 +1,4 @@
-﻿using System.Buffers.Text;
-using System.Xml.Linq;
-using WhatDidIEatAPIv2.Models;
+﻿using WhatDidIEatAPIv2.Models;
 
 namespace WhatDidIEatAPIv2.Services;
 
@@ -61,7 +59,7 @@ public class PictureService(IConfiguration config) : IPictureService
     }
 
     var filePath = config.GetValue<string>("FilePath:MealPictures")!;
-    var temp = Convert.FromBase64String(picture.Base64);
-    File.WriteAllBytes(filePath, temp);
+    var pictureArray = Convert.FromBase64String(picture.Base64);
+    File.WriteAllBytes(filePath, pictureArray);
   }
 }
