@@ -24,7 +24,7 @@ public class BaseTest
   private WhatDidIEatv2Context GetMemoryContext()
   {
     var options = new DbContextOptionsBuilder<WhatDidIEatv2Context>()
-      .UseInMemoryDatabase(databaseName: "TestDb")
+      .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
       .Options;
 
     return new WhatDidIEatv2Context(options);
