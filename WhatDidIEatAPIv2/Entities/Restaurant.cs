@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WhatDidIEatAPIv2.Entities;
+﻿namespace WhatDidIEatAPIv2.Entities;
 
 public partial class Restaurant
 {
