@@ -27,6 +27,7 @@ namespace WhatDidIEatAPIv2
 
       //services
       builder.Services.AddTransient<IMealService, MealService>();
+      builder.Services.AddTransient<IRestaurantService, RestaurantService>();
       builder.Services.AddTransient<IPictureService, PictureService>();
 
       //model factory
