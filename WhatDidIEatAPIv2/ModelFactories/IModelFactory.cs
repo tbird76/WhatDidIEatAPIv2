@@ -7,4 +7,6 @@ public interface IModelFactory
 {
   MealDTO CreateMealDTO(Meal meal, bool sendWithPicture);
   Meal ParseMealFromMealDTO(MealDTO meal);
+  RestaurantDTO CreateRestaurantDTO(Restaurant restaurant);
+  Restaurant ParseRestaurantFromRestaurantDTO(RestaurantDTO restaurant);
 }
