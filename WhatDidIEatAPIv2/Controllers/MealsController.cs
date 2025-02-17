@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WhatDidIEatAPIv2.Data;
-using WhatDidIEatAPIv2.Entities;
-using System.Net;
-using Microsoft.AspNetCore.Http;
-using WhatDidIEatAPIv2.Services;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using WhatDidIEatAPIv2.Exceptions;
-using System.Text.Json;
 using WhatDidIEatAPIv2.Models;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using WhatDidIEatAPIv2.Services;
 
 namespace WhatDidIEatAPIv2.Controllers;
 
@@ -64,9 +57,21 @@ public class MealsController(IMealService mealService) : ControllerBase
     }
   }
 
-  [HttpPost("{id}")]
-  public async Task<IActionResult> UpsertMeal(int id, [FromBody] MealDTO meal)
+  [HttpPost()]
+  public async Task<IActionResult> UpsertMeal([FromBody] MealDTO meal)
   {
-    return Ok();
+    var response = await mealService.UpsertMealAsync(meal);
+    if(response.Status == "400")
+    {
+      return BadRequest(response);
+    }
+    else if(response.Status == "201")
+    {
+      return Created(new Uri(Request.GetEncodedUrl() + "/" + meal.Id) , response);
+    }
+    else
+    {
+      return Ok(response);
+    }
   }
 }
