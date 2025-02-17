@@ -19,7 +19,13 @@ public class MealService(IMealRepository repo, IModelFactory modelFactory) : IMe
 {
   public async Task<IEnumerable<MealDTO>> GetMealsAsync(bool sendWithPicture)
   {
-    var meals = await repo.GetMealsAsync() ?? throw new NotFoundException("No Meals were found");
+    var meals = await repo.GetMealsAsync();
+
+    if (!meals.Any())
+    {
+      throw new NotFoundException("No Meals were found");
+    }
+
     var mealDTOs = meals.Select(m => modelFactory.CreateMealDTO(m, sendWithPicture));     
 
     return mealDTOs;
@@ -83,15 +89,15 @@ public class MealService(IMealRepository repo, IModelFactory modelFactory) : IMe
       response.Message = ex.Message;
     }
 
-    response.OrigMealId = oridId;
+    response.OrigId = oridId;
     return response;
   }
 
-  public async Task<IEnumerable<UpsertMealResponse>> UpsertMealsAsync(IEnumerable<MealDTO> meals)
+  public async Task<IEnumerable<UpsertMealResponse>> UpsertMealsAsync(IEnumerable<MealDTO> mealDTOs)
   {
     var responses = new List<UpsertMealResponse>();
 
-    foreach(var meal in meals)
+    foreach(var meal in mealDTOs)
     {
       var response = await UpsertMealAsync(meal);
       responses.Add(response);
@@ -100,8 +106,18 @@ public class MealService(IMealRepository repo, IModelFactory modelFactory) : IMe
     return responses;
   }
 
-  public async Task<UpsertMealResponse?> DeleteMealAsync(Meal meal)
+  public async Task<UpsertMealResponse?> DeleteMealAsync(MealDTO mealDTO)
   {
-    return new ();
+    var response = new UpsertMealResponse()
+    {
+      OrigId = mealDTO.Id.ToString()
+    };
+
+    var meal = modelFactory.ParseMealFromMealDTO(mealDTO);
+    var deletedMeal = await repo.DeleteMealAsync(meal);
+
+    response.Meal = modelFactory.CreateMealDTO(deletedMeal!, false);
+
+    return response;
   }
 }
