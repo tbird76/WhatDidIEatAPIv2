@@ -33,13 +33,13 @@ public class MealRepository(WhatDidIEatv2Context context) : IMealRepository
   {
     await context.Meals.AddAsync(meal);
     await context.SaveChangesAsync();
-    var mealFromeDb = await context.Meals.Where(m => m.Id == meal.Id).FirstOrDefaultAsync();
+    var mealFromeDb = await GetMealByIdAsync(meal.Id);
     return mealFromeDb;
   }
 
   public async Task<Meal?> UpdateMealAsync(Meal meal)
   {
-    var mealFromDb = await context.Meals.Where(m => m.Id == meal.Id).FirstOrDefaultAsync();
+    var mealFromDb = await GetMealByIdAsync(meal.Id);
 
     if(mealFromDb == null) 
     {
@@ -54,15 +54,16 @@ public class MealRepository(WhatDidIEatv2Context context) : IMealRepository
     mealFromDb.Comment = meal.Comment;
     mealFromDb.PictureName = meal.PictureName;
     mealFromDb.RestaurantId = meal.RestaurantId;
+
     context.Update(mealFromDb);
     await context.SaveChangesAsync();
 
-    return await context.Meals.Where(m => m.Id == meal.Id).FirstOrDefaultAsync();
+    return await GetMealByIdAsync(meal.Id);
   }
 
   public async Task<Meal?> DeleteMealAsync(Meal meal)
   {
-    var mealFromDb = await context.Meals.Where(m => m.Id == meal.Id).FirstOrDefaultAsync();
+    var mealFromDb = await GetMealByIdAsync(meal.Id);
 
     if(mealFromDb == null)
     {
