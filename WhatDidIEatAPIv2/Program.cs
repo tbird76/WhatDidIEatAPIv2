@@ -23,6 +23,7 @@ namespace WhatDidIEatAPIv2
 
       //repos
       builder.Services.AddTransient<IMealRepository, MealRepository>();
+      builder.Services.AddTransient<IRestaurantRepository, RestaurantRepository>();
 
       //services
       builder.Services.AddTransient<IMealService, MealService>();
